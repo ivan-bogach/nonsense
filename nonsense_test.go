@@ -41,3 +41,28 @@ func TestSendStringToTelegram(t *testing.T) {
 		}
 	}
 }
+
+var StringIsNumericTests = []struct {
+	str      string
+	expected bool
+}{
+	{"test", false},
+	{"", false},
+	{"0", true},
+	{"0.0", true},
+	{"0.00", true},
+	{"-1", true},
+	{"-1000000000.0", true},
+	{"-7777.0545454545", true},
+	{"3254545454540545454545", true},
+}
+
+func TestStringIsNumeric(t *testing.T) {
+	t.Parallel()
+
+	for _, ct := range StringIsNumericTests {
+		if StringIsNumeric(ct.str) != ct.expected {
+			t.Errorf("StringIsNumeric(%s) = %v, want %v", ct.str, !ct.expected, ct.expected)
+		}
+	}
+}

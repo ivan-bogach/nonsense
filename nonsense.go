@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os/user"
+	"strconv"
 	"strings"
 )
 
@@ -39,4 +40,9 @@ func SendStringToTelegram(s string) int {
 
 	defer resp.Body.Close()
 	return resp.StatusCode
+}
+
+func StringIsNumeric(s string) bool {
+	_, err := strconv.ParseFloat(s, 64)
+	return err == nil
 }
