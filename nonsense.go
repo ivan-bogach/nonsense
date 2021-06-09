@@ -42,6 +42,7 @@ func SendStringToTelegram(s string) int {
 	return resp.StatusCode
 }
 
+// StringIsNumeric reports whether s contains numeric value.
 func StringIsNumeric(s string) bool {
 	_, err := strconv.ParseFloat(s, 64)
 	return err == nil
