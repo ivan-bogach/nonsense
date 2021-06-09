@@ -35,7 +35,7 @@ func TestSendStringToTelegram(t *testing.T) {
 	t.Parallel()
 
 	for _, ct := range SendStringToTelegramTests {
-		sstt := SendStringToTelegram(ct.str)
+		sstt, _ := SendStringToTelegram(ct.str)
 		if sstt != ct.expected {
 			t.Errorf("SendStringToTelegram(%s) = %d, want %v", ct.str, sstt, ct.expected)
 		}
