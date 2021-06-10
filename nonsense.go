@@ -103,6 +103,7 @@ func OnlyUnique(slice []string) []string {
 	return uniqSlice
 }
 
+// StringSlicesUnion returns union of two slices
 func StringSlicesUnion(one, two []string) []string {
 	var union []string
 	union = append(union, one...)
@@ -110,6 +111,7 @@ func StringSlicesUnion(one, two []string) []string {
 	return OnlyUnique(union)
 }
 
+// StringSliceDifference returns difference of two slices
 func StringSliceDifference(one, two []string) []string {
 	var difference []string
 	for _, str := range one {
