@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os/user"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -46,4 +47,77 @@ func SendStringToTelegram(s string) (int, error) {
 func StringIsNumeric(s string) bool {
 	_, err := strconv.ParseFloat(s, 64)
 	return err == nil
+}
+
+// CompareStringSlices reports whether slices a and b are equal.
+func CompareStringSlices(a, b []string) bool {
+	if (a == nil) != (b == nil) {
+		return false
+	}
+
+	if len(a) != len(b) {
+		return false
+	}
+
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
+// StringSlicesIntersection returns two slices intersection
+func StringSlicesIntersection(a, b []string) (c []string) {
+	m := make(map[string]bool)
+
+	for _, item := range a {
+		m[item] = true
+	}
+
+	for _, item := range b {
+		if _, ok := m[item]; ok {
+			c = append(c, item)
+		}
+	}
+	return
+}
+
+// OnlyUnique returns only unique strings from slice (drop duplicates)
+func OnlyUnique(slice []string) []string {
+	uniqMap := make(map[string]struct{})
+	for _, v := range slice {
+		uniqMap[v] = struct{}{}
+	}
+
+	uniqSlice := make([]string, 0, len(uniqMap))
+
+	keys := make([]string, 0, len(uniqMap))
+	for k := range uniqMap {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	uniqSlice = append(uniqSlice, keys...)
+
+	return uniqSlice
+}
+
+func StringSlicesUnion(one, two []string) []string {
+	var union []string
+	union = append(union, one...)
+	union = append(union, two...)
+	return OnlyUnique(union)
+}
+
+func StringSliceDifference(one, two []string) []string {
+	var difference []string
+	for _, str := range one {
+		if SliceContainsString(two, str) {
+			continue
+		} else {
+			difference = append(difference, str)
+		}
+	}
+	return difference
 }
