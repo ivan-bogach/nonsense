@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"os/user"
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // SliceContainsString reports whether slaice sl contains string s.
@@ -33,8 +35,19 @@ func SendStringToTelegram(s string) (int, error) {
 	}
 	str := strings.TrimSuffix(string(b), "\n")
 	sendStr := str + s
+	t := &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout:   60 * time.Second,
+			KeepAlive: 30 * time.Second,
+		}).Dial,
+		// ABSURDLY large keys, for ABSURDLY dumb devices like raspberry.
+		TLSHandshakeTimeout: 60 * time.Second,
+	}
+	c := &http.Client{
+		Transport: t,
+	}
 
-	resp, err := http.Get(sendStr)
+	resp, err := c.Get(sendStr)
 	if err != nil {
 		return 0, fmt.Errorf("this is an %s error: %s", "SendStringToTelegram", err)
 	}
